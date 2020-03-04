@@ -2,9 +2,9 @@ provider "aws" {}
 
 resource "aws_instance" "application" {
   # https://cloud-images.ubuntu.com/locator/ec2/
-  ami = "ami-07ebfd5b3428b6f4d"
-  instance_type = "t2.micro"
-  key_name = "gorilla_ec2_key"
+  ami                    = "ami-07ebfd5b3428b6f4d"
+  instance_type          = "t2.micro"
+  key_name               = "gorilla_ec2_key"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
   tags = {
     Name = "Gorilla Test"
@@ -21,30 +21,30 @@ resource "aws_security_group" "instance" {
   description = "SG for Gorilla test app"
 
   ingress {
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
