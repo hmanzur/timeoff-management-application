@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - master
+
+name: Deploy Aplication
+
+jobs:
+   test:
+    name: Run test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+      
+      - name: Install phantomjs
+        run: sudo apt-get install phantomjs -y
+
+      - name: 'Run tests'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: |
+          npm install
+          npm test
+        env:
+          CI: true
