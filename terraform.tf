@@ -2,9 +2,9 @@ provider "aws" {}
 
 resource "aws_instance" "application" {
   # https://cloud-images.ubuntu.com/locator/ec2/
-  ami                    = "ami-07ebfd5b3428b6f4d"
-  instance_type          = "t2.micro"
-  key_name               = "gorilla_ec2_key"
+  ami           = "ami-07ebfd5b3428b6f4d"
+  instance_type = "t2.micro"
+  key_name      = "gorilla_ec2_key"
   # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
   tags = {
