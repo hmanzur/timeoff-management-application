@@ -12,16 +12,70 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
-      
-      - name: Install phantomjs
-        run: sudo apt-get install phantomjs -y
 
-      - name: 'Run tests'
+      - name: 'ChecSetup Chrome Driver'
+        uses: nanasess/setup-chromedriver@master
+        with:
+          # Optional: do not specify to match Chrome's version
+          chromedriver-version: '77.0.3865.40'
+      - run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
+      - name: 'Setup Node.js'
         uses: actions/setup-node@v1
         with:
           node-version: '10.16.0'
-      - run: |
-          npm install
-          npm test
+      
+      - name: 'Setup phantomjs'
+        run: sudo apt install phantomjs -y
+
+      - name: 'Cache node modules'
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+          
+      - name: 'Install Dependencies'
+        run: npm install
+
+      - name: 'Compile sass'
+        run: npm run compile-sass
+
+      - name: 'Migrate database'
+        run: npm run db-update
+
+      - name: 'Run Tests'
+        run: npm test    
         env:
           CI: true
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible==2.9.2 requests
+      - name: set ansible config secrets
+        env:
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          DO_SSH_KEY: ${{ secrets.DO_SSH_KEY }}
+        run: |
+          echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
+          mkdir .ssh
+          echo "$DO_SSH_KEY" > .ssh/id_digitalocean
+          chmod 600 .ssh/id_digitalocean
+      - name: run exporters playbook
+        env:
+          DO_API_KEY: ${{ secrets.DO_API_KEY }}
+        run: |
+          ansible-playbook -i inventory playbook.yml

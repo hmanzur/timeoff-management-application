@@ -7,11 +7,28 @@ resource "aws_instance" "application" {
   key_name      = "gorilla_ec2_key"
   # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+
+  user_data = <<-EOT
+    # update dependencies
+    sudo apt update -y
+
+    # install ansible
+    sudo apt install ansible -y
+
+    # download and install node repository
+    curl -sL https://deb.nodesource.com/setup_10.x | bash
+
+    # install node and
+    sudo apt install nodejs npm -y
+
+    # Install pm2 server
+    sudo npm install pm2 -g
+  EOT
+
   tags = {
     Name = "Gorilla Test"
   }
 }
-
 
 #resource "aws_key_pair" "deployer" {
 #  key_name   = "gorilla-key"
