@@ -1,7 +1,6 @@
 'use strict';
 
-var webdriver = require('selenium-webdriver'),
-    Promise   = require("bluebird");
+var Promise   = require("bluebird");
 
 module.exports = Promise.promisify( function(args, callback){
 
@@ -14,12 +13,10 @@ module.exports = Promise.promisify( function(args, callback){
     .get( url )
     .then(function(){
       // "export" current driver
-      result_callback(
-        null,
-        {
-          driver : driver,
-        }
-      );
+      result_callback(null, { driver });
+    })
+    .catch(function(e){
+      result_callback(e);
     });
 
 });
