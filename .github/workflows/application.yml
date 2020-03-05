@@ -6,7 +6,7 @@ on:
 name: Deploy Aplication
 
 jobs:
-   test:
+  test:
     name: Run test
     runs-on: ubuntu-latest
     steps:
@@ -46,17 +46,25 @@ jobs:
       - name: 'Install Dependencies'
         run: npm install
 
+      - name: 'Run Tests'
+        run: npm test    
+        env:
+          CI: true
+
+  build:
+    name: Compile and migrate
+    runs-on: ubuntu-latest
+    steps:
       - name: 'Compile sass'
         run: npm run compile-sass
 
       - name: 'Migrate database'
         run: npm run db-update
 
-      - name: 'Run Tests'
-        run: npm test    
-        env:
-          CI: true
-
+  deploy:
+    name: Ansible deploy
+    runs-on: ubuntu-latest
+    steps:
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -79,3 +87,4 @@ jobs:
           DO_API_KEY: ${{ secrets.DO_API_KEY }}
         run: |
           ansible-playbook -i inventory playbook.yml
+  
