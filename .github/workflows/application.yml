@@ -54,6 +54,7 @@ jobs:
   build:
     name: Compile and migrate
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: 'Compile sass'
         run: npm run compile-sass
@@ -62,6 +63,7 @@ jobs:
         run: npm run db-update
 
   deploy:
+    needs: build
     name: Ansible deploy
     runs-on: ubuntu-latest
     steps:
