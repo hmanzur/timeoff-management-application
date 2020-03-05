@@ -13,12 +13,13 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@master
 
-      - name: 'ChecSetup Chrome Driver'
+      - name: 'Setup Chrome Driver'
         uses: nanasess/setup-chromedriver@master
         with:
           # Optional: do not specify to match Chrome's version
           chromedriver-version: '77.0.3865.40'
-      - run: |
+      - name: 'Configure Chrome Driver'
+        run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
@@ -30,18 +31,6 @@ jobs:
       
       - name: 'Setup phantomjs'
         run: sudo apt install phantomjs -y
-
-      - name: 'Cache node modules'
-        uses: actions/cache@v1
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
 
   build:
     name: Compile and migrate

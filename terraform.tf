@@ -1,19 +1,30 @@
 terraform {
   required_version = ">= 0.12"
+  backend "s3" {
+    bucket = "ci-gorilla-test-habib"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
+}
+
+# https://www.terraform.io/docs/providers/aws/d/s3_bucket_object.html
+data "aws_s3_bucket_object" "bootstrap_script" {
+  bucket = "ci-gorilla-test-habib"
+  key    = "ec2-bootstrap-script.sh"
 }
 
 resource "aws_instance" "application" {
   # https://cloud-images.ubuntu.com/locator/ec2/
   ami           = "ami-07ebfd5b3428b6f4d"
   instance_type = "t2.micro"
-  key_name      = "deployer-key"
+  key_name      = "gorilla_ec2_key"
 
   # key_name      = "${aws_key_pair.generated_key.key_name}"
-  vpc_security_group_ids = [aws_security_group.instance.id]
-
+  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+  /*
   provisioner "remote-exec" {
     inline = [
       "sudo apt update -y",
@@ -22,8 +33,16 @@ resource "aws_instance" "application" {
       "sudo apt install nodejs npm -y",
       "sudo npm install pm2 -g",
     ]
-  }
 
+    
+    connection {
+      type     = "ssh"
+      user     = "ubuntu"
+      host     = "${aws_instance.application.public_ip}"
+    }
+    
+  }
+*/
   /* user_data = <<-EOT
     # update dependencies
     sudo apt update -y
@@ -44,14 +63,6 @@ resource "aws_instance" "application" {
   tags = {
     Name = "Gorilla Test"
   }
-}
-
-variable "public_key" {
-}
-
-resource "aws_key_pair" "deployer" {
-  key_name   = "deployer-key"
-  public_key = var.public_key
 }
 
 resource "aws_security_group" "instance" {
@@ -88,6 +99,6 @@ resource "aws_security_group" "instance" {
 }
 
 output "public_ip" {
-  value = aws_instance.application.public_ip
+  value = "${aws_instance.application.public_ip}"
 }
 
