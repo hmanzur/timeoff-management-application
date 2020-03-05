@@ -8,7 +8,17 @@ resource "aws_instance" "application" {
   # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
 
-  user_data = <<-EOT
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install ansible -y",
+      "curl -sL https://deb.nodesource.com/setup_10.x | bash",
+      "sudo apt install nodejs npm -y",
+      "sudo npm install pm2 -g"
+    ]
+  }
+
+  /* user_data = <<-EOT
     # update dependencies
     sudo apt update -y
 
@@ -23,7 +33,7 @@ resource "aws_instance" "application" {
 
     # Install pm2 server
     sudo npm install pm2 -g
-  EOT
+  EOT */
 
   tags = {
     Name = "Gorilla Test"
@@ -60,7 +70,7 @@ resource "aws_security_group" "instance" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
+egress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
