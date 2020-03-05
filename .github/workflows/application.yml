@@ -51,9 +51,6 @@ jobs:
       - name: 'Compile sass'
         run: npm run compile-sass
 
-      - name: 'Migrate database'
-        run: npm run db-update
-
   deploy:
     needs: build
     name: Ansible deploy

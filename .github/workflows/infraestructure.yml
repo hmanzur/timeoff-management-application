@@ -67,22 +67,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Upload Terraform state
-        uses: actions/upload-artifact@v1
-        with:
-          name: state
-          path: terraform.tfstate
-
-      - name: 'Terraform Output'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.21
-          tf_actions_subcommand: 'output'
-      - name: 'Use Terraform Output'
-        run: echo ${{ steps.terraform.outputs.public_ip  }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
