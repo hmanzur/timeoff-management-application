@@ -56,6 +56,9 @@ jobs:
     name: Ansible deploy
     runs-on: ubuntu-latest
     steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -63,19 +66,19 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ansible==2.9.2 requests
+          pip install ansible requests
       - name: set ansible config secrets
         env:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          DO_SSH_KEY: ${{ secrets.DO_SSH_KEY }}
+          SSH_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
           mkdir .ssh
-          echo "$DO_SSH_KEY" > .ssh/id_digitalocean
-          chmod 600 .ssh/id_digitalocean
+          echo "$SSH_KEY" > .ssh/id_aws
+          chmod 600 .ssh/id_aws
       - name: run exporters playbook
         env:
-          DO_API_KEY: ${{ secrets.DO_API_KEY }}
+          DO_API_KEY: ${{ secrets.DO_API_KEY }}d1
         run: |
           ansible-playbook -i inventory playbook.yml
   
