@@ -1,5 +1,5 @@
 ---
-- hosts: my_app
+- hosts: localhost
   sudo: yes
   
   vars:
@@ -7,7 +7,6 @@
     - appDir : app
     - repo: https://github.com/hmanzur/timeoff-management-application
     - account: hmanzur
-
 
   tasks:
   - name: Install Packages

@@ -24,41 +24,6 @@ resource "aws_instance" "application" {
 
   # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
-  /*
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt update -y",
-      "sudo apt install ansible -y",
-      "curl -sL https://deb.nodesource.com/setup_10.x | bash",
-      "sudo apt install nodejs npm -y",
-      "sudo npm install pm2 -g",
-    ]
-
-    
-    connection {
-      type     = "ssh"
-      user     = "ubuntu"
-      host     = "${aws_instance.application.public_ip}"
-    }
-    
-  }
-*/
-  /* user_data = <<-EOT
-    # update dependencies
-    sudo apt update -y
-
-    # install ansible
-    sudo apt install ansible -y
-
-    # download and install node repository
-    curl -sL https://deb.nodesource.com/setup_10.x | bash
-
-    # install node and
-    sudo apt install nodejs npm -y
-
-    # Install pm2 server
-    sudo npm install pm2 -g
-  EOT */
 
   tags = {
     Name = "Gorilla Test"
