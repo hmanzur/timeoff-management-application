@@ -16,6 +16,9 @@ jobs:
         with:
           python-version: 3.7
 
+      - name: 'Checkout'
+        uses: actions/checkout@master
+
       - name: Install boto3
         run: |
           pip install boto3
