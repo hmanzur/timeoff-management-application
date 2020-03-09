@@ -9,13 +9,16 @@ jobs:
   s3:
     name: Create S3 Bucket
     runs-on: ubuntu-latest
+
     - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+
     - name: Install boto3
       run: |
         pip install boto3
+
     - name: Create bucket
       run: |
         python scripts/create_bucket.py
