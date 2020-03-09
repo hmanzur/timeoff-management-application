@@ -24,6 +24,8 @@ resource "aws_instance" "application" {
 
   user_data = "${file("scripts/user-data.txt")}"
 
+  public_ip = true
+
   # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
 
