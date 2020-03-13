@@ -20,7 +20,7 @@ try:
     with open(key_name, "w") as fh:
         fh.write(key_pair.key_material)
         
-    os.chmod(key_name, 0400)
+    os.chmod(key_name, 0664)
 
 except Exception as e:
     pass
