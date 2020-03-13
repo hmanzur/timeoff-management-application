@@ -25,11 +25,10 @@ resource "aws_instance" "application" {
   key_name                    = var.ec2_key
   associate_public_ip_address = true
 
-  # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   provisioner "file" {
-    content     = "${data.aws_s3_bucket_object.ec2_key_file.body}"
+    content     = data.aws_s3_bucket_object.ec2_key_file.body
     destination = "artifacts/${var.ec2_key}.pem"
   }
 
