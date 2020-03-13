@@ -71,7 +71,8 @@ jobs:
           name: artifacts
           path: artifacts
 
-      - uses: ./.github/actions/download_private_key
+      - name: Download private key
+        uses: ./.github/actions/private_key
 
       - name: run exporters playbook
         run: |
