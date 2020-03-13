@@ -87,11 +87,11 @@ jobs:
     name: Trigger release
     needs: github.ref == 'refs/head/master'
     runs-on: ubuntu-latest
-
-    - name: Trigger application
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: hmanzur/timeoff-management-application
-        event-type: deploy-app
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+    steps:
+      - name: Trigger application
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: hmanzur/timeoff-management-application
+          event-type: deploy-app
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

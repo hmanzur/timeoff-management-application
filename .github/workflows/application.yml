@@ -67,9 +67,9 @@ jobs:
 
       - name: Artifact restore key
         uses: actions/download-artifact@v1
-          with:
-            name: ${{ secrets.KEY_NAME }}
-            path: "${{ secrets.KEY_NAME }}.pem"
+        with:
+          name: ${{ secrets.KEY_NAME }}
+          path: "${{ secrets.KEY_NAME }}.pem"
       
       - name: Artifact restore public ip
         uses: actions/download-artifact@v1
