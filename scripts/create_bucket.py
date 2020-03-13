@@ -17,11 +17,6 @@ try:
     s3 = boto3.client('s3')
     s3.put_object(Body=key_pair.key_material, Bucket=bucket_name, Key=key_name)
 
-    with open(key_name, "w") as fh:
-        fh.write(key_pair.key_material)
-        
-    os.chmod(key_name, 0664)
-
 except Exception as e:
     pass
 

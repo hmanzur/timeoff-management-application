@@ -13,7 +13,7 @@ env:
 
 jobs:
   s3:
-    name: Pre requisites
+    name: Setup aws
     runs-on: ubuntu-latest
 
     steps:
