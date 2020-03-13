@@ -28,8 +28,9 @@ resource "aws_instance" "application" {
   # key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = [aws_security_group.instance.id]
 
-  provisioner "local-exec" {
-    command = "apt-get install awscli -y && aws s3 cp s3://${data.aws_s3_bucket_object.ec2_key_file.bucket}/${var.ec2_key}.pem artifacts/${var.ec2_key}.pem"
+  provisioner "file" {
+    content     = "${data.aws_s3_bucket_object.ec2_key_file.body}"
+    destination = "artifacts/${var.ec2_key}.pem"
   }
 
   provisioner "remote-exec" {
