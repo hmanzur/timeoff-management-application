@@ -27,11 +27,6 @@ resource "aws_instance" "application" {
 
   vpc_security_group_ids = [aws_security_group.instance.id]
 
-  provisioner "file" {
-    content     = data.aws_s3_bucket_object.ec2_key_file.body
-    destination = "artifacts/${var.ec2_key}.pem"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update -y",
@@ -44,6 +39,10 @@ resource "aws_instance" "application" {
       host        = aws_instance.application.public_ip
       private_key = file("artifacts/${var.ec2_key}.pem")
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = {
