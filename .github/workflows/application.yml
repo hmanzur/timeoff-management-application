@@ -71,8 +71,8 @@ jobs:
           name: artifacts
           path: artifacts
 
-        uses: ./.github/actions/download_private_key
-        
+      - uses: ./.github/actions/download_private_key
+
       - name: run exporters playbook
         run: |
           ip=$(<artifacts/public_ip)
