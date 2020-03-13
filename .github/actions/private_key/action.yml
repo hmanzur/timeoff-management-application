@@ -1,9 +1,0 @@
-jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: chrislennon/action-aws-cli@v1.1
-
-        - run: |
-            aws s3 cp s3://ci-gorilla-test-habib/${{ secrets.KEY_NAME }}.pem ${{ secrets.KEY_NAME }}.pem
-            chmod 400 artifacts/${{ secrets.KEY_NAME }}.pem

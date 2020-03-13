@@ -65,8 +65,13 @@ jobs:
           tf_actions_version: 0.12.21
           tf_actions_subcommand: 'plan'
       
+      - name: Setup AWS Cli
+        uses: chrislennon/action-aws-cli@v1.1
+      
       - name: Download private key
-        uses: ./.github/actions/private_key
+        run: |
+          aws s3 cp s3://ci-gorilla-test-habib/${{ secrets.KEY_NAME }}.pem ${{ secrets.KEY_NAME }}.pem
+          chmod 400 artifacts/${{ secrets.KEY_NAME }}.pem
 
       - name: 'Terraform Apply'
         uses: hashicorp/terraform-github-actions@master
