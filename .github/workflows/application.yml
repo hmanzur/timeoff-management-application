@@ -1,6 +1,6 @@
 on:
   repository_dispatch:
-    types: [${{ secrets.EVENT_TYPE }}]
+    types: [deploy-app]
 
 name: Deploy Aplication
 

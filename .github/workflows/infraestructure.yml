@@ -84,8 +84,11 @@ jobs:
           path: public_ip
   
   next:
+    name: Trigger release
     needs: github.ref == 'refs/head/master'
-    - name: Trigger release
+    runs-on: ubuntu-latest
+
+    - name: Trigger application
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
