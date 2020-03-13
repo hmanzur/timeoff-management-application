@@ -1,9 +1,0 @@
-#!/bin/bash
-
-/bin/echo "Hello world" >> /home/ubuntu/habib.txt
-
-# update dependencies
-sudo apt update -y
-
-# Install ansible
-sudo apt install ansible -y

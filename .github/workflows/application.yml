@@ -1,7 +1,6 @@
 on:
-  push:
-    branches:
-      - master
+  repository_dispatch:
+    types: [${{ secrets.EVENT_TYPE }}]
 
 name: Deploy Aplication
 
@@ -60,22 +59,26 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install ansible requests
-      - name: set ansible config secrets
-        env:
-          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          SSH_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
-          mkdir .ssh
-          echo "$SSH_KEY" > .ssh/id_aws
-          chmod 600 .ssh/id_aws
+
+      - name: Artifact restore key
+        uses: actions/download-artifact@v1
+          with:
+            name: ${{ secrets.KEY_NAME }}
+            path: "${{ secrets.KEY_NAME }}.pem"
+      
+      - name: Artifact restore public ip
+        uses: actions/download-artifact@v1
+        with:
+          name: public_ip
+          path: public_ip
+
       - name: run exporters playbook
-        env:
-          DO_API_KEY: ${{ secrets.DO_API_KEY }}d1
         run: |
-          ansible-playbook -i inventory playbook.yml
+          ip=$(<public_ip)
+          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key gori ${{ secrets.KEY_NAME }}.pem
   

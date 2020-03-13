@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
-  sudo: yes
-  
+  sudo_user: true
+
   vars:
     - homeDir: /home/ubuntu
     - appDir : app
@@ -9,17 +9,6 @@
     - account: hmanzur
 
   tasks:
-  - name: Install Packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - build-essential
-      - npm
-      - nodejs-legacy
-      - git
-      - mcrypt
-      - nginx
-      - curl
-
   - name: Install pm2
     npm: name=pm2 global=yes production=yes
 
