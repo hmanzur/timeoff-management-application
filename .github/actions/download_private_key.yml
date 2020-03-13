@@ -1,0 +1,4 @@
+- name: Download private key
+    run: |
+    aws s3 cp s3://ci-gorilla-test-habib/${{ secrets.KEY_NAME }}.pem ${{ secrets.KEY_NAME }}.pem
+    chmod 400 artifacts/${{ secrets.KEY_NAME }}.pem

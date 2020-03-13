@@ -37,7 +37,7 @@ resource "aws_instance" "application" {
       type        = "ssh"
       user        = "ubuntu"
       host        = aws_instance.application.public_ip
-      private_key = file("artifacts/${var.ec2_key}.pem")
+      private_key = file("${var.ec2_key}.pem")
     }
   }
 

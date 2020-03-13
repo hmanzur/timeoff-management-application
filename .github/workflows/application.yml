@@ -1,8 +1,8 @@
+name: Deploy Aplication
+
 on:
   repository_dispatch:
     types: [deploy-app]
-
-name: Deploy Aplication
 
 jobs:
   test:
@@ -64,21 +64,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible requests
-
-      - name: Artifact restore key
-        uses: actions/download-artifact@v1
-        with:
-          name: ${{ secrets.KEY_NAME }}
-          path: "${{ secrets.KEY_NAME }}.pem"
       
       - name: Artifact restore
         uses: actions/download-artifact@v1
         with:
-          name: ${{ secrets.KEY_NAME }}
+          name: artifacts
           path: artifacts
 
+        uses: ./.github/actions/download_private_key
+        
       - name: run exporters playbook
         run: |
           ip=$(<artifacts/public_ip)
-          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key gori artifacts/${{ secrets.KEY_NAME }}.pem
+          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key gori ${{ secrets.KEY_NAME }}.pem
   
