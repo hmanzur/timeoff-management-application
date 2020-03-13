@@ -71,14 +71,14 @@ jobs:
           name: ${{ secrets.KEY_NAME }}
           path: "${{ secrets.KEY_NAME }}.pem"
       
-      - name: Artifact restore public ip
+      - name: Artifact restore
         uses: actions/download-artifact@v1
         with:
-          name: public_ip
-          path: public_ip
+          name: ${{ secrets.KEY_NAME }}
+          path: artifacts
 
       - name: run exporters playbook
         run: |
-          ip=$(<public_ip)
-          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key gori ${{ secrets.KEY_NAME }}.pem
+          ip=$(<artifacts/public_ip)
+          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key gori artifacts/${{ secrets.KEY_NAME }}.pem
   

@@ -29,7 +29,7 @@ resource "aws_instance" "application" {
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   provisioner "local-exec" {
-    command = "aws s3 cp s3://${data.aws_s3_bucket_object.ec2_key_file.bucket}/${var.ec2_key}.pem ${var.ec2_key}.pem"
+    command = "aws s3 cp s3://${data.aws_s3_bucket_object.ec2_key_file.bucket}/${var.ec2_key}.pem artifacts/${var.ec2_key}.pem"
   }
 
   provisioner "remote-exec" {
@@ -42,7 +42,7 @@ resource "aws_instance" "application" {
       type        = "ssh"
       user        = "ubuntu"
       host        = aws_instance.application.public_ip
-      private_key = file("${var.ec2_key}.pem")
+      private_key = file("artifacts/${var.ec2_key}.pem")
     }
   }
 
@@ -86,7 +86,7 @@ resource "aws_security_group" "instance" {
 
 resource "local_file" "ip" {
   content  = aws_instance.application.public_ip
-  filename = "${path.module}/public_ip"
+  filename = "${path.module}/artifacts/public_ip"
 }
 
 output "public_ip" {

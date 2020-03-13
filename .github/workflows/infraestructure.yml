@@ -33,12 +33,6 @@ jobs:
         run: |
           python scripts/create_bucket.py
 
-      - name: Artifact backup
-        uses: actions/upload-artifact@v1
-        with:
-          name: ${{ secrets.KEY_NAME }}
-          path: "${{ secrets.KEY_NAME }}.pem"
-
   terraform:
     name: Terraform Deploy
     runs-on: ubuntu-latest
@@ -76,12 +70,12 @@ jobs:
         with:
           tf_actions_version: 0.12.21
           tf_actions_subcommand: 'apply'
-         
+
       - name: Artifact backup
         uses: actions/upload-artifact@v1
         with:
-          name: public_ip
-          path: public_ip
+          name: ${{ secrets.KEY_NAME }}
+          path: artifacts
   
   next:
     name: Trigger release
