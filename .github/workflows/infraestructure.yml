@@ -87,7 +87,6 @@ jobs:
   
   next:
     name: Trigger release
-    if: github.ref == 'refs/head/master'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger application
