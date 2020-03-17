@@ -2,7 +2,7 @@ import os
 import boto3
 import datetime
 
-bucket_name = 'ci-gorilla-test-habib'
+bucket_name = os.getenv('BUCKET_NAME')
 
 # Create bucket
 boto3.resource('s3').create_bucket(Bucket=bucket_name)

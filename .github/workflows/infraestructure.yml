@@ -6,8 +6,15 @@ on:
       - master
 
 env:
+  # Github token
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  # Terraform
   TERRAFORM_VERSION: 'latest'
+  TF_VAR_key_name: ${{ secrets.KEY_NAME }}
+  TF_VAR_bucket_name: ${{ secrets.BUCKET_NAME }}
+
+  # AWS
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
