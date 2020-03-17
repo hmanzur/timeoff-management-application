@@ -1,28 +1,13 @@
-terraform {
-  required_version = ">= 0.12"
-  backend "s3" {
-    bucket = "ci-gorilla-test-habib"
-    key    = "terraform.tfstate"
-    region = "us-east-1"
-  }
-}
-
-variable "ec2_key" {
-  type        = string
-  default     = "gorilla_ec2_key"
-  description = "Pem key name"
-}
-
 data "aws_s3_bucket_object" "ec2_key_file" {
-  bucket = "ci-gorilla-test-habib"
-  key    = "${var.ec2_key}.pem"
+  bucket = var.bucket_name
+  key    = "${var.key_name}.pem"
 }
 
 resource "aws_instance" "application" {
   # https://cloud-images.ubuntu.com/locator/ec2/
   ami                         = "ami-07ebfd5b3428b6f4d"
   instance_type               = "t2.micro"
-  key_name                    = var.ec2_key
+  key_name                    = var.key_name
   associate_public_ip_address = true
 
   vpc_security_group_ids = [aws_security_group.instance.id]
@@ -37,7 +22,7 @@ resource "aws_instance" "application" {
       type        = "ssh"
       user        = "ubuntu"
       host        = aws_instance.application.public_ip
-      private_key = file("${var.ec2_key}.pem")
+      private_key = file("${var.key_name}.pem")
     }
   }
 
@@ -91,4 +76,3 @@ resource "local_file" "ip" {
 output "public_ip" {
   value = aws_instance.application.public_ip
 }
-

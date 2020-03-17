@@ -1,8 +1,6 @@
 name: Deploy Aplication
 
-on:
-  repository_dispatch:
-    types: [deploy-app]
+on: repository_dispatch
 
 jobs:
   test:
@@ -82,5 +80,5 @@ jobs:
       - name: run exporters playbook
         run: |
           ip=$(<artifacts/public_ip)
-          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key gori ${{ secrets.KEY_NAME }}.pem
+          ansible-playbook -i playbook.yml --host $ip --user ubuntu --key ${{ secrets.KEY_NAME }}.pem
   
