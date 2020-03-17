@@ -1,8 +1,3 @@
-data "aws_s3_bucket_object" "ec2_key_file" {
-  bucket = var.bucket_name
-  key    = "${var.key_name}.pem"
-}
-
 resource "aws_instance" "application" {
   # https://cloud-images.ubuntu.com/locator/ec2/
   ami                         = "ami-07ebfd5b3428b6f4d"
@@ -22,7 +17,7 @@ resource "aws_instance" "application" {
       type        = "ssh"
       user        = "ubuntu"
       host        = aws_instance.application.public_ip
-      private_key = file("${var.key_name}.pem")
+      private_key = file("${var.root}/${var.key_name}.pem")
     }
   }
 
@@ -70,7 +65,7 @@ resource "aws_security_group" "instance" {
 
 resource "local_file" "ip" {
   content  = aws_instance.application.public_ip
-  filename = "${path.module}/artifacts/public_ip"
+  filename = "${var.root}/artifacts/public_ip"
 }
 
 output "public_ip" {
