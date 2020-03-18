@@ -3,6 +3,10 @@ name: Deploy Aplication
 on: 
   repository_dispatch:
     types: [my-event]
+    
+  release:
+    types: 
+      - created
 
 jobs:
   test:
