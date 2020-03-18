@@ -86,6 +86,11 @@ jobs:
         run: |
           aws s3 cp s3://ci-gorilla-test-habib/${{ secrets.KEY_NAME }}.pem ${{ secrets.KEY_NAME }}.pem
           chmod 400 artifacts/${{ secrets.KEY_NAME }}.pem
+      
+      - name: Restore Aritfacts
+        run: |
+          mkdir -p artifacts
+          aws s3 sync s3://${{ secrets.BUCKET_NAME }}/ ./artifacts
 
       - name: run exporters playbook
         run: |
