@@ -3,6 +3,10 @@ name: Deploy Aplication
 on: 
   repository_dispatch:
     types: [my-event]
+
+  push:
+    branches:
+      - master
     
   release:
     types: 
