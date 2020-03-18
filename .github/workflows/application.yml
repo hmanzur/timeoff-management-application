@@ -72,12 +72,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible requests
-      
-      - name: Artifact restore
-        uses: actions/download-artifact@v1
-        with:
-          name: artifacts
-          path: artifacts
 
       - name: Setup AWS Cli
         uses: chrislennon/action-aws-cli@v1.1
